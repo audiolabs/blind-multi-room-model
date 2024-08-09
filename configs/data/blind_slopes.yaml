@@ -1,0 +1,10 @@
+_target_: src.data.blind_slopes.BlindSlopesDataModule
+
+train_url: ${paths.data_dir}/slope_dataset/train-{0000..0010}.tar
+valid_url: ${paths.data_dir}/slope_dataset/valid-{0000..0001}.tar
+test_url: ${paths.data_dir}/slope_dataset/test-{0000..0001}.tar
+
+batch_size: 64
+
+num_workers: 0
+pin_memory: False

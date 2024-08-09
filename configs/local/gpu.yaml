@@ -1,0 +1,7 @@
+# @package _global_
+
+data:
+  num_workers: 12
+trainer:
+  accelerator: gpu
+  devices: 1

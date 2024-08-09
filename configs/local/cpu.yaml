@@ -1,0 +1,6 @@
+# @package _global_
+
+data:
+  num_workers: 0
+trainer:
+  accelerator: cpu

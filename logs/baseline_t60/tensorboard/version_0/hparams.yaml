@@ -1,0 +1,136 @@
+model:
+  _target_: src.models.baseline_module_t60.MultiSlopeEstimation
+  optimizer:
+    _target_: torch.optim.AdamW
+    _partial_: true
+    lr: 0.0001
+    weight_decay: 0.005
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.5
+    patience: 4
+  component:
+    _target_: src.models.components.transformer.Transformer
+    d_model: 128
+    nhead: 4
+    dim_feedforward: 256
+    num_layers: 1
+    dropout: 0.4
+    out_features: 7
+    state: null
+    front_end:
+      _target_: src.models.components.cnn.CNNEncoder
+      in_channels: 1
+      channels: 4
+      multipliers:
+      - 1
+      - 2
+      - 2
+      - 2
+      - 2
+      kernel_sizes:
+      - - 1
+        - 11
+      - - 1
+        - 11
+      - - 3
+        - 7
+      - - 3
+        - 7
+      strides:
+      - - 1
+        - 1
+      - - 1
+        - 1
+      - - 1
+        - 1
+      - - 1
+        - 1
+      factors:
+      - - 1
+        - 1
+      - - 1
+        - 2
+      - - 1
+        - 2
+      - - 2
+        - 2
+      pads:
+      - - 0
+        - 0
+      - - 0
+        - 0
+      - - 0
+        - 0
+      - - 0
+        - 0
+      num_blocks:
+      - 1
+      - 1
+      - 1
+      - 1
+      ch_matching: null
+model/params/total: 192191
+model/params/trainable: 192191
+model/params/non_trainable: 0
+data:
+  _target_: src.data.blind_slopes.BlindSlopesDataModule
+  train_url: ${paths.data_dir}/slope_dataset/train-{0000..0010}.tar
+  valid_url: ${paths.data_dir}/slope_dataset/valid-{0000..0001}.tar
+  test_url: ${paths.data_dir}/slope_dataset/test-{0000..0001}.tar
+  batch_size: 64
+  num_workers: 0
+  pin_memory: false
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: ${paths.output_dir}
+  min_epochs: 4
+  max_epochs: 300
+  accelerator: cpu
+  devices: 1
+  check_val_every_n_epoch: 1
+  deterministic: false
+callbacks:
+  model_checkpoint:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    filename: epoch_{epoch:03d}
+    monitor: val/loss
+    verbose: false
+    save_last: false
+    save_top_k: 1
+    mode: min
+    auto_insert_metric_name: false
+    save_weights_only: false
+    every_n_train_steps: null
+    train_time_interval: null
+    every_n_epochs: null
+    save_on_train_epoch_end: null
+  early_stopping:
+    _target_: lightning.pytorch.callbacks.EarlyStopping
+    monitor: val/loss
+    min_delta: 0.0
+    patience: 18
+    verbose: false
+    mode: min
+    strict: true
+    check_finite: true
+    stopping_threshold: null
+    divergence_threshold: null
+    check_on_train_epoch_end: null
+  model_summary:
+    _target_: lightning.pytorch.callbacks.RichModelSummary
+    max_depth: -1
+  rich_progress_bar:
+    _target_: lightning.pytorch.callbacks.RichProgressBar
+extras:
+  ignore_warnings: false
+  enforce_tags: true
+  print_config: true
+task_name: train
+tags:
+- dev
+ckpt_path: null
+seed: null
