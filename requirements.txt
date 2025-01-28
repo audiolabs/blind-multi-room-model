@@ -14,7 +14,7 @@ pandas==2.2.2
 rich==13.7.1
 rootutils==1.0.7
 scipy==1.14.0
-setuptools==69.5.1
+setuptools==70.0.0
 torch==2.3.0
 torchaudio==2.3.0
 torchmetrics==1.4.0.post0
