@@ -15,7 +15,7 @@ rich==13.7.1
 rootutils==1.0.7
 scipy==1.14.0
 setuptools==78.1.1
-torch==2.3.0
+torch==2.7.0
 torchaudio==2.3.0
 torchmetrics==1.4.0.post0
 tqdm==4.66.4
