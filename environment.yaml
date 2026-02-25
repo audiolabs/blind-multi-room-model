@@ -204,7 +204,7 @@ dependencies:
       - nvidia-nvjitlink-cu12==12.5.82
       - nvidia-nvtx-cu12==12.1.105
       - omegaconf==2.3.0
-      - onnx==1.16.1
+      - onnx==1.17.0
       - onnxruntime==1.18.1
       - pandas==2.2.2
       - protobuf==4.25.4
